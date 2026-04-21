@@ -9,7 +9,7 @@ This project contains a Postman collection designed to validate the **Spring Pet
 - It focuses on simulating the real-world scenario where a new customer brings a pet for a first visit, testing the nominal flow end-to-end.
 > Note: We can extend the tests with more scenarios
 
-## Running the Test 2
+## Running the Test
 
 ### Prerequisites
 
