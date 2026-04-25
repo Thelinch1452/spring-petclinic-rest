@@ -1,33 +1,30 @@
 pipeline{
-agent any
-tools {
-maven 'maven3.9.15'
-jdk 'java_17'
-}
-stages{
-stage("test"){
-steps{
-sh "mvn clean test"
-}
-post{
-success{
-junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
+    agent any
+    tools{
+        maven 'maven3.9.15'
+        jdk 'java_17'
+    }
+    stages{
+        stage("test"){
+            steps{
+                sh "mvn clean test"
+            }
+            post{
+                success{
+                    junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage("build"){
+            steps{
+                sh "mvn package -DskipTests -B -ntp"
+            }
+        }
 
-}
-}
-}
-stage("build"){
-steps{
-sh "mvn package -DskipTests -B -ntp"
-}
-}
-
-}
-post{
-always{
-echo "Despues de todos los steps"
-}
-
-}
-
+    }
+    post{
+        always{
+            echo "Despues de todos los steps"
+        }
+    }
 }
