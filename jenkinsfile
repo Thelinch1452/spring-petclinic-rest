@@ -1,0 +1,26 @@
+pipeline{
+agent:any
+tools:{
+maven 'maven3.9.15'
+jdk:'java_17'
+}
+stages{
+stage('Checksun'){
+steps{
+git branch: 'master', url:'https://github.com/Thelinch1452/spring-petclinic-rest.git'
+}
+}
+stage("test"){
+steps{
+sh "mvn clean test"
+}
+}
+stage("build"){
+steps:{
+sh "mvn package -DskipTests -B -ntp"
+}
+}
+
+}
+
+}
