@@ -1,8 +1,8 @@
 pipeline{
 agent any
-tools:{
+tools {
 maven 'maven3.9.15'
-jdk:'java_17'
+jdk 'java_17'
 }
 stages{
 stage('Checksun'){
@@ -16,7 +16,7 @@ sh "mvn clean test"
 }
 }
 stage("build"){
-steps:{
+steps{
 sh "mvn package -DskipTests -B -ntp"
 }
 }
