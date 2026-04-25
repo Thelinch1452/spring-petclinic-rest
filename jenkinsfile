@@ -8,12 +8,24 @@ stages{
 stage("test"){
 steps{
 sh "mvn clean test"
+post{
+success{
+junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
+
+}
+}
 }
 }
 stage("build"){
 steps{
 sh "mvn package -DskipTests -B -ntp"
 }
+}
+
+}
+post{
+always{
+
 }
 
 }
