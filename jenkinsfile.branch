@@ -9,12 +9,12 @@ pipeline{
         }
     stages{
         stage("test"){
-
-            steps{
-              when{
+      when{
                             branch 'feature/*'
 
                         }
+            steps{
+
                 sh "mvn clean test"
                 echo "Construyendo en rama ${env.BRANCH_NAME} prueba"
             }
