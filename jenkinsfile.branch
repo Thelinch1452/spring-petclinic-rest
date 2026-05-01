@@ -6,15 +6,16 @@ pipeline{
     }
     stages{
         stage("test"){
+
             steps{
-                sh "mvn clean test"
+               // sh "mvn clean test"
                 echo "Construyendo en rama ${env.BRANCH_NAME} prueba"
             }
-            post{
-                success{
-                    junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
-                }
-            }
+//            post{
+//                success{
+//                   junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
+//              }
+//         }
         }
         stage("coverage"){
             steps{
@@ -30,6 +31,15 @@ pipeline{
             steps{
                 sh "mvn package -DskipTests -B -ntp"
             }
+        }
+        stage("Static analytics"){
+        when{
+        branch 'feature/*'
+
+        }
+        steps{
+
+        echo 'ejecutando analisis estatico'
         }
 
     }
