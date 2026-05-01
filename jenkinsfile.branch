@@ -1,0 +1,41 @@
+pipeline{
+    agent any
+    tools{
+        maven 'maven3.9.15'
+        jdk 'java_17'
+    }
+    stages{
+        stage("test"){
+            steps{
+                sh "mvn clean test"
+                echo "Construyendo en rama ${env.BRANCH_NAME}"
+            }
+            post{
+                success{
+                    junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage("coverage"){
+            steps{
+                sh "mvn jacoco:report -B -ntp"
+            }
+            post{
+                success{
+                    recordCoverage(tools:[[parser:'JACOCO']])
+                }
+            }
+        }
+        stage("Pakage"){
+            steps{
+                sh "mvn package -DskipTests -B -ntp"
+            }
+        }
+
+    }
+    post{
+        success{
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+        }
+    }
+}
