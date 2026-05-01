@@ -4,18 +4,18 @@ pipeline{
         maven 'maven3.9.15'
         jdk 'java_17'
     }
-        options {
-            skipStagesAfterUnstable()
-        }
+    options {
+        skipStagesAfterUnstable()
+    }
     stages{
         stage("test"){
-      when{
-                            branch 'feature/*'
+            when{
+                branch 'feature/*'
 
-                        }
+            }
             steps{
 
-              //  sh "mvn clean test"
+                //  sh "mvn clean test"
                 echo "Construyendo en rama ${env.BRANCH_NAME} prueba"
             }
             //            post{
@@ -25,23 +25,23 @@ pipeline{
             //         }
         }
         stage("coverage"){
-          when{
-                        branch 'feature/*'
+            when{
+                branch 'feature/*'
 
-                    }
+            }
             steps{
-               // sh "mvn jacoco:report -B -ntp"
-            echo "generando coverage"
+                // sh "mvn jacoco:report -B -ntp"
+                echo "generando coverage"
             }
             //post{
-                //success{
-               //     recordCoverage(tools:[[parser:'JACOCO']])
-              ///  }
+            //success{
+            //     recordCoverage(tools:[[parser:'JACOCO']])
+            ///  }
             //}
         }
         stage("Pakage"){
             steps{
-               // sh "mvn package -DskipTests -B -ntp"
+                // sh "mvn package -DskipTests -B -ntp"
             }
         }
         stage("Static analytics"){
@@ -56,14 +56,18 @@ pipeline{
 
         }
         stage("Deploy"){
-        when{ branch 'master'}
-         steps{
-         sh "DEPLOYANDOOOO"
+            when{
+                branch 'master'
+            }
+            steps{
+                sh "DEPLOYANDOOOO"
+            }
+        }
+        post{
+            success{
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
         }
     }
-    post{
-        success{
-            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-        }
-    }
+
 }
