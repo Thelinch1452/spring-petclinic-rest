@@ -63,10 +63,11 @@ pipeline{
                 sh "DEPLOYANDOOOO"
             }
         }
-        post{
-            success{
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-            }
+
+    }
+    post{
+        success{
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
     }
 
