@@ -8,7 +8,11 @@ pipeline{
         stage("test"){
 
             steps{
-                // sh "mvn clean test"
+              when{
+                            branch 'feature/*'
+
+                        }
+                sh "mvn clean test"
                 echo "Construyendo en rama ${env.BRANCH_NAME} prueba"
             }
             //            post{
@@ -18,6 +22,10 @@ pipeline{
             //         }
         }
         stage("coverage"){
+          when{
+                        branch 'feature/*'
+
+                    }
             steps{
                 sh "mvn jacoco:report -B -ntp"
             }
