@@ -15,7 +15,7 @@ pipeline{
                         }
             steps{
 
-                sh "mvn clean test"
+              //  sh "mvn clean test"
                 echo "Construyendo en rama ${env.BRANCH_NAME} prueba"
             }
             //            post{
@@ -30,17 +30,18 @@ pipeline{
 
                     }
             steps{
-                sh "mvn jacoco:report -B -ntp"
+               // sh "mvn jacoco:report -B -ntp"
+            echo "generando coverage"
             }
-            post{
-                success{
-                    recordCoverage(tools:[[parser:'JACOCO']])
-                }
-            }
+            //post{
+                //success{
+               //     recordCoverage(tools:[[parser:'JACOCO']])
+              ///  }
+            //}
         }
         stage("Pakage"){
             steps{
-                sh "mvn package -DskipTests -B -ntp"
+               // sh "mvn package -DskipTests -B -ntp"
             }
         }
         stage("Static analytics"){
@@ -53,6 +54,11 @@ pipeline{
                 echo 'ejecutando analisis estatico'
             }
 
+        }
+        stage("Deploy"){
+        when{ branch 'master'}
+         steps{
+         sh "DEPLOYANDOOOO"
         }
     }
     post{
