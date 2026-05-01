@@ -8,14 +8,14 @@ pipeline{
         stage("test"){
 
             steps{
-               // sh "mvn clean test"
+                // sh "mvn clean test"
                 echo "Construyendo en rama ${env.BRANCH_NAME} prueba"
             }
-//            post{
-//                success{
-//                   junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
-//              }
-//         }
+            //            post{
+            //                success{
+            //                   junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
+            //              }
+            //         }
         }
         stage("coverage"){
             steps{
@@ -33,19 +33,20 @@ pipeline{
             }
         }
         stage("Static analytics"){
-        when{
-        branch 'feature/*'
+            when{
+                branch 'feature/*'
+
+            }
+            steps{
+
+                echo 'ejecutando analisis estatico'
+            }
 
         }
-        steps{
-
-        echo 'ejecutando analisis estatico'
-        }
-
-    }
-    post{
-        success{
-            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+        post{
+            success{
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
         }
     }
 }
