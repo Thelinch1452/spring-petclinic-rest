@@ -41,6 +41,7 @@ pipeline{
         }
         stage("Pakage"){
             steps{
+                echo "Packaging"
                 // sh "mvn package -DskipTests -B -ntp"
             }
         }
