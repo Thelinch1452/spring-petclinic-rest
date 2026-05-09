@@ -15,14 +15,14 @@ pipeline{
             }
             steps{
 
-                //  sh "mvn clean test"
-                echo "Construyendo en rama ${env.BRANCH_NAME} prueba"
+                  sh "mvn clean test"
+                //echo "Construyendo en rama ${env.BRANCH_NAME} prueba"
             }
-            //            post{
-            //                success{
-            //                   junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
-            //              }
-            //         }
+                       post{
+                            success{
+                               junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
+                          }
+                     }
         }
         stage("coverage"){
             when{
@@ -30,19 +30,19 @@ pipeline{
 
             }
             steps{
-                // sh "mvn jacoco:report -B -ntp"
-                echo "generando coverage"
+                sh "mvn jacoco:report -B -ntp"
+               // echo "generando coverage"
             }
-            //post{
-            //success{
-            //     recordCoverage(tools:[[parser:'JACOCO']])
-            ///  }
-            //}
+            post{
+            success{
+                 recordCoverage(tools:[[parser:'JACOCO']])
+              }
+            }
         }
         stage("Pakage"){
             steps{
-                echo "Packaging"
-                // sh "mvn package -DskipTests -B -ntp"
+                //echo "Packaging"
+                sh "mvn package -DskipTests -B -ntp"
             }
         }
         stage("Static analytics"){
