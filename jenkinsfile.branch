@@ -4,31 +4,44 @@ pipeline{
         maven 'maven3.9.15'
         jdk 'java_17'
     }
+    options {
+        skipStagesAfterUnstable()
+    }
     stages{
         stage("test"){
+            when{
+                branch 'feature/*'
 
-            steps{
-                // sh "mvn clean test"
-                echo "Construyendo en rama ${env.BRANCH_NAME} prueba"
             }
-            //            post{
-            //                success{
-            //                   junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
-            //              }
-            //         }
+            steps{
+
+                  sh "mvn clean test"
+                //echo "Construyendo en rama ${env.BRANCH_NAME} prueba"
+            }
+                       post{
+                            success{
+                               junit skipMarkingBuildUnstable: true, testResults: 'target/surefire-reports/*.xml'
+                          }
+                     }
         }
         stage("coverage"){
+            when{
+                branch 'feature/*'
+
+            }
             steps{
                 sh "mvn jacoco:report -B -ntp"
+               // echo "generando coverage"
             }
             post{
-                success{
-                    recordCoverage(tools:[[parser:'JACOCO']])
-                }
+            success{
+                 recordCoverage(tools:[[parser:'JACOCO']])
+              }
             }
         }
         stage("Pakage"){
             steps{
+                //echo "Packaging"
                 sh "mvn package -DskipTests -B -ntp"
             }
         }
@@ -43,10 +56,20 @@ pipeline{
             }
 
         }
-        post{
-            success{
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+        stage("Deploy"){
+            when{
+                branch 'master'
+            }
+            steps{
+                sh "DEPLOYANDOOOO"
             }
         }
+
     }
+    post{
+        success{
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+        }
+    }
+
 }
